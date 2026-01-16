@@ -6,12 +6,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float turnSpeed = 360;
+    Animator animator;
     private Vector3 inputDirection;
 
+    void Awake()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
     void Update()
     {
         GatherInputForIsometricPlane();
         Look();
+        Animate();
     }
 
     void FixedUpdate()
@@ -45,4 +51,11 @@ public class PlayerMovement : MonoBehaviour
         rb.MovePosition(transform.position + (transform.forward * inputDirection.magnitude) * moveSpeed * Time.deltaTime);
     }
 
+    void Animate()
+    {
+        if(animator != null)
+        {
+            animator.SetFloat("Speed", inputDirection.magnitude);
+        }
+    }
 }

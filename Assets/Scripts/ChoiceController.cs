@@ -28,6 +28,11 @@ public class ChoiceController : MonoBehaviour
         if (!active) return;
     }
 
+    public void YesOrNo()
+    {
+        
+    }
+
     public void StartItemSelection(Dictionary<ItemData, int> items, System.Action<ItemData> callback)
     {
         onSelected = callback;

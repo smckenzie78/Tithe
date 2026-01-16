@@ -5,30 +5,30 @@ public class PlayerActions : MonoBehaviour
 {
     PlayerState playerState;
     InventoryManager inventoryManager;
+    GridManager gridManager;
+    
 
     void Awake()
     {
         playerState = gameObject.GetComponent<PlayerState>();
         inventoryManager = FindAnyObjectByType<InventoryManager>();
+        gridManager = FindAnyObjectByType<GridManager>();
     }
     void TryInteract()
     {
-        Vector3 fwd = transform.TransformDirection(Vector3.forward);
         RaycastHit hit;
+        Vector2Int cell;
+        Vector3 combinedDirection = (transform.forward + Vector3.down).normalized;
 
-        if (Physics.Raycast(transform.position, fwd, out hit, 1))
+        Physics.Raycast(transform.position, combinedDirection, out hit, 1);
+        cell = gridManager.WorldToCell(hit.point);
+        Debug.Log(cell.x.ToString() + cell.y.ToString());
+        Debug.Log(gridManager.IsOccupied(cell));
+        if(gridManager.IsOccupied(cell) && gridManager.GetTerrainType(cell) == 1)
         {
-            if (hit.collider.gameObject.tag == "Soil")
-            {
-                hit.collider.gameObject.GetComponent<SoilTile>().soilInteraction();
-            }
-            if (hit.collider.gameObject.tag == "NPC")
-            {
-                hit.collider.gameObject.GetComponent<NPCBehavior>().NPCInteraction();
-            }
+            gridManager.TryPlantingCrop(cell);
         }
     }
-
 
     void Update()
     {

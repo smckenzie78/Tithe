@@ -12,13 +12,16 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI DayCounter;
     [SerializeField] private TextMeshProUGUI TimeCounter;
     Season currentSeason;
+    GridManager gridManager;
     void Awake()
     {
+        gridManager = FindAnyObjectByType<GridManager>();
         getDay();
         getTimeInDay();
         getSeason();
         DayCounter.text = "Day " + day.ToString() + "/" + daysInYear.ToString();
     }
+
 
     void Update()
     {
@@ -82,5 +85,6 @@ public class TimeManager : MonoBehaviour
         timeInDay = 0;
         DayCounter.text = "Day " + day.ToString() + "/" + daysInYear.ToString();
         getSeason();
+        gridManager.OnDayAdvanced();
     }
 }
